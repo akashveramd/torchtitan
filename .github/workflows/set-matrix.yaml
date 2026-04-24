@@ -1,4 +1,4 @@
-game: Set Matrix
+name: Set Matrix
 
 on:
   workflow_call:
