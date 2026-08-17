@@ -68,8 +68,11 @@ jobs:
 
         python -m pip install --pre --no-deps torchvision --index-url ${{ matrix.index-url }}
 
-        export HIPBLASLT_TENSILE_LIBPATH="$(python -c 'import os, torch; print(os.path.join(os.path.dirname(torch.__file__), "lib", "hipblaslt", "library"))')"
-        echo "HIPBLASLT_TENSILE_LIBPATH=${HIPBLASLT_TENSILE_LIBPATH}"
+        HIPBLASLT_LIB_DIR="$(python -c 'import os, torch; print(os.path.join(os.path.dirname(torch.__file__), "lib", "hipblaslt", "library"))')"
+        if [ -d "${HIPBLASLT_LIB_DIR}" ]; then
+          export HIPBLASLT_TENSILE_LIBPATH="${HIPBLASLT_LIB_DIR}"
+          echo "HIPBLASLT_TENSILE_LIBPATH=${HIPBLASLT_TENSILE_LIBPATH}"
+        fi
 
         USE_CPP=0 python -m pip install --pre torchao --index-url ${{ matrix.index-url }}
 
