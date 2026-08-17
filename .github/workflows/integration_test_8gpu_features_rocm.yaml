@@ -79,6 +79,8 @@ jobs:
           echo "HIPBLASLT_TENSILE_LIBPATH=${HIPBLASLT_TENSILE_LIBPATH}"
         fi
 
+        export PYTORCH_ALLOC_CONF="expandable_segments:False"
+
         start=$(date +%s)
         USE_CPP=0 python -m pip install --pre torchao --index-url ${{ matrix.index-url }}
         end=$(date +%s)
