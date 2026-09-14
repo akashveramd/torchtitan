@@ -493,9 +493,14 @@ def main():
     )
     parser.add_argument(
         "--gpu_arch",
-        default="a10g",
+        default=None,
         choices=["a10g", "h100", "b200", "mi350x"],
-        help="Specific GPU model, used to select the matching golden numerics file.",
+        help=(
+            "Specific GPU model, used to select the matching golden numerics "
+            "file. Defaults to 'mi350x' for --gpu_arch_type=rocm and 'a10g' "
+            "otherwise, so a caller can't silently resolve ROCm goldens "
+            "under an A10G path by omitting this flag."
+        ),
     )
     parser.add_argument(
         "--test_suite",
@@ -545,6 +550,8 @@ def main():
         "Use --no-parallel to force sequential execution (default: parallel).",
     )
     args = parser.parse_args()
+    if args.gpu_arch is None:
+        args.gpu_arch = "mi350x" if args.gpu_arch_type == "rocm" else "a10g"
 
     try:
         test_suites = _parse_test_suites(args.test_suite)
