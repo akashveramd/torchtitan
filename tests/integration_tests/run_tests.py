@@ -254,7 +254,10 @@ def run_single_test(
             if export_numerics:
                 steps = config.training.steps
                 metrics = ("loss", "grad_norm")
-                result_path = Path(output_dir) / golden_numerics_path.name
+                result_path = Path(output_dir) / golden_numerics_path.relative_to(
+                    "tests/assets/losses"
+                )
+                result_path.parent.mkdir(parents=True, exist_ok=True)
                 result_arg = f"--export-result={result_path}"
             else:
                 steps, metrics = _read_golden_spec(golden_numerics_path)
